@@ -165,11 +165,11 @@ public class Highlight {
     private static void showHelp() {
         System.out.println("Highlight text passed to stdin.");
         System.out.println();
-        System.out.println("Usage: Highlight [options] text");
+        System.out.println("Usage: hl [options] text");
         System.out.println();
         System.out.println("Examples:");
-        System.out.println("cat file.txt | Highlight -r text");
-        System.out.println("adb logcat | Highlight -c \"some logging text\"");
+        System.out.println("cat file.txt | hl -r text");
+        System.out.println("adb logcat | hl -c \"some logging text\"");
         System.out.println();
         System.out.println("Color options:");
         System.out.println("    -a, --black         " + TEXT_BLACK + "Black" + RESET);
