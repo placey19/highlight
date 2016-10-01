@@ -1,0 +1,8 @@
+#!/bin/bash
+
+classpath=$(dirname "$0")
+javac "$classpath/Highlight.java"
+if [ $? -eq 0 ]; then
+  echo "Success!"
+  echo
+fi

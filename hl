@@ -1,0 +1,4 @@
+#!/bin/bash
+
+classpath=$(dirname "$0")
+java -classpath "$classpath" Highlight "$@"
