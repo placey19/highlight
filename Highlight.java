@@ -3,6 +3,10 @@ import java.util.*;
 
 public class Highlight {
 
+    //environment variables
+    private static final String ENV_DEFAULT_COLOR = "HL_DEFAULT_COLOR";                      //user-defined default color
+    private static final String ENV_ALWAYS_CASE_INSENSTIVE = "HL_ALWAYS_CASE_INSENSITIVE";   //always perform case insensitive matching
+
     //colors
     enum Color {
         BLACK,
@@ -15,7 +19,7 @@ public class Highlight {
         WHITE
     }
 
-    private static final Color DEFAULT_COLOR = Color.WHITE;
+    private static Color sDefaultColor = Color.WHITE;
 
     //attributes
     private static final String RESET = "\u001B[0m";
@@ -99,10 +103,11 @@ public class Highlight {
     private static String sTargetText;
     private static String sAttributes = "";
     private static boolean sHighlightWholeLine = false;
-    private static boolean sCaseSensitive = true;
+    private static boolean sCaseSensitive = true;               //set by command line option
+    private static boolean sAlwaysCaseInsensitive = false;      //set by environment variable
 
     public static void main(final String args[]) throws IOException {
-        if (parseArgs(args)) {
+        if (parseEnvVars() && parseArgs(args)) {
             String line = "";
             final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
             while ((line = stdin.readLine()) != null) {
@@ -111,9 +116,46 @@ public class Highlight {
         }
     }
 
+    private static boolean parseEnvVars() {
+        boolean result = true;
+
+        final Map<String, String> envVars = System.getenv();
+
+        final String envDefaultColor = envVars.get(ENV_DEFAULT_COLOR);
+        if (envDefaultColor != null) {
+            final Color color = COLORS_MAP.get("--" + envDefaultColor.toLowerCase());
+            if (color != null) {
+                sDefaultColor = color;
+            } else {
+                System.err.println("Environment variable: " + TEXT_WHITE + ENV_DEFAULT_COLOR + RESET +
+                                   " has unknown value: " + TEXT_WHITE + envDefaultColor + RESET);
+                result = false;
+            }
+        }
+
+        final String envCaseInsensitive = envVars.get(ENV_ALWAYS_CASE_INSENSTIVE);
+        if (envCaseInsensitive != null) {
+            final String value = envCaseInsensitive.toLowerCase();
+            sAlwaysCaseInsensitive = value.equals("true") || value.equals("1");
+            if (sAlwaysCaseInsensitive) {
+                sCaseSensitive = false;
+            } else if (!value.equals("") && !value.equals("false") && !value.equals("0")) {
+                System.err.println("Environment variable: " + TEXT_WHITE + ENV_ALWAYS_CASE_INSENSTIVE + RESET +
+                                   " has unknown value: " + TEXT_WHITE + envCaseInsensitive + RESET);
+                result = false;
+            }
+        }
+
+        if (!result) {
+            System.err.println();
+        }
+
+        return result;
+    }
+
     private static boolean parseArgs(final String args[]) {
         if (args.length > 0) {
-            Color color = DEFAULT_COLOR;
+            Color color = sDefaultColor;
             boolean underline = false;
             boolean blink = false;
             boolean background = false;
@@ -172,22 +214,28 @@ public class Highlight {
         System.out.println("adb logcat | hl -c \"some logging text\"");
         System.out.println();
         System.out.println("Color options:");
-        System.out.println("    -a, --black         " + TEXT_BLACK + "Black" + RESET);
-        System.out.println("    -r, --red           " + TEXT_RED + "Red" + RESET);
-        System.out.println("    -g, --green         " + TEXT_GREEN + "Green" + RESET);
-        System.out.println("    -y, --yellow        " + TEXT_YELLOW + "Yellow" + RESET);
-        System.out.println("    -b, --blue          " + TEXT_BLUE + "Blue" + RESET);
-        System.out.println("    -p, --purple        " + TEXT_PURPLE + "Purple" + RESET);
-        System.out.println("    -c, --cyan          " + TEXT_CYAN + "Cyan" + RESET);
-        System.out.println("    -w, --white         " + TEXT_WHITE + "White" + RESET + " (default)");
+        System.out.print("    -a, --black         " + TEXT_BLACK + "Black" + RESET);    printlnDefault(Color.BLACK);
+        System.out.print("    -r, --red           " + TEXT_RED + "Red" + RESET);        printlnDefault(Color.RED);
+        System.out.print("    -g, --green         " + TEXT_GREEN + "Green" + RESET);    printlnDefault(Color.GREEN);
+        System.out.print("    -y, --yellow        " + TEXT_YELLOW + "Yellow" + RESET);  printlnDefault(Color.YELLOW);
+        System.out.print("    -b, --blue          " + TEXT_BLUE + "Blue" + RESET);      printlnDefault(Color.BLUE);
+        System.out.print("    -p, --purple        " + TEXT_PURPLE + "Purple" + RESET);  printlnDefault(Color.PURPLE);
+        System.out.print("    -c, --cyan          " + TEXT_CYAN + "Cyan" + RESET);      printlnDefault(Color.CYAN);
+        System.out.print("    -w, --white         " + TEXT_WHITE + "White" + RESET);    printlnDefault(Color.WHITE);
         System.out.println();
         System.out.println("Other options:");
-        System.out.println("    -i, --ignore-case   Perform case insensitive matching");
+        if (!sAlwaysCaseInsensitive) {
+            System.out.println("    -i, --ignore-case   Perform case insensitive matching");
+        }
         System.out.println("    -l, --line          Highlight whole line");
         System.out.println("    -u, --underline     Underline matching text");
         System.out.println("    -k, --blink         Blink matching text");
         System.out.println("    -n, --background    Highlight background of matching text instead");
         System.out.println();
+    }
+
+    private static void printlnDefault(final Color color) {
+        System.out.println(sDefaultColor == color ? " (default)" : "");
     }
 
     private static void printlnWithHighlight(String line) {

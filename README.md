@@ -37,6 +37,16 @@ Also, if you want to pipe stdin more than once like:
 same line then the two instances of Highlight might clash and not have the
 desired results.
 
+## Optional environment variables
+These are not mentioned in the help text but are supported:
+
+- **HL_DEFAULT_COLOR**  
+Use the named color (e.g: `red`, `blue`, etc) as the default instead of white
+- **HL_ALWAYS_CASE_INSENSITIVE**  
+Set to `true` or `1` to always perform case insensitive matching like the **-i**
+option is always being provided. When set, the **-i** option won't even show up
+in the help text!
+
 ## Usage
 
 As this is a Java command line application and running a Java class is long and
