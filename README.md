@@ -21,9 +21,9 @@ can be executed.
 
 ## Disclaimers & limitations
 
-I haven't actually tried this on anything else other than Terminal v2.6.1 on
-OS X El Capitan. However, I've read the ANSI codes I've used are widely
-supported...
+I've tried this with Terminal v2.6.1 on OS X El Capitan, Windows 10 Command
+Prompt and Windows 10 Powershell. I've read the ANSI codes are widely supported
+but sadly look like crap on Command Prompt and Powershell.
 
 [https://en.wikipedia.org/wiki/ANSI_escape_code](https://en.wikipedia.org/wiki/ANSI_escape_code)
 
@@ -35,9 +35,10 @@ to highlight which matches an escaped sequence then things go awry.
 Also, if you want to pipe stdin more than once like:
 `cat whatever.txt | hl -r red | hl -g green` and both texts are matched on the
 same line then the two instances of Highlight might clash and not have the
-desired results.
+desired result.
 
 ## Optional environment variables
+
 These are not mentioned in the help text but are supported:
 
 - **HL_DEFAULT_COLOR**  
