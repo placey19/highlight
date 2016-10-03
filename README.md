@@ -56,29 +56,4 @@ ugly and not something you want to write each time
 simple script called **hl** which will do it for you which is what is referenced
 in the help text.
 
-```
-Highlight text passed to stdin.
-
-Usage: hl [options] text
-
-Examples:
-cat file.txt | hl -r text
-adb logcat | hl -c "some logging text"
-
-Color options:
-    -a, --black         Black
-    -r, --red           Red
-    -g, --green         Green
-    -y, --yellow        Yellow
-    -b, --blue          Blue
-    -p, --purple        Purple
-    -c, --cyan          Cyan
-    -w, --white         White (default)
-
-Other options:
-    -i, --ignore-case   Perform case insensitive matching
-    -l, --line          Highlight whole line
-    -u, --underline     Underline matching text
-    -k, --blink         Blink matching text
-    -n, --background    Highlight background of matching text instead
-```
+![Usage](https://cloud.githubusercontent.com/assets/16898116/19025233/ac88c658-890d-11e6-92c2-46517b4a8598.png)
