@@ -225,17 +225,21 @@ public class Highlight {
         System.out.println();
         System.out.println("Other options:");
         if (!sAlwaysCaseInsensitive) {
-            System.out.println("    -i, --ignore-case   Perform case insensitive matching");
+            System.out.println("    -i, --ignore-case   Perform " + TEXT_RED + "case insensitive" + RESET + " matching");
         }
-        System.out.println("    -l, --line          Highlight whole line");
-        System.out.println("    -u, --underline     Underline matching text");
-        System.out.println("    -k, --blink         Blink matching text");
-        System.out.println("    -n, --background    Highlight background of matching text instead");
+        System.out.println("    -l, --line          " + TEXT_GREEN + "Highlight whole line" + RESET);
+        System.out.println("    -u, --underline     " + TEXT_YELLOW + UNDERLINE + "Underline" + RESET + " matching text");
+        System.out.println("    -k, --blink         " + TEXT_BLUE + BLINK + "Blink" + RESET + " matching text");
+        System.out.println("    -n, --background    Highlight " + BACK_PURPLE + "background" + RESET + " of matching text instead");
         System.out.println();
     }
 
     private static void printlnDefault(final Color color) {
-        System.out.println(sDefaultColor == color ? " (default)" : "");
+        if (color == sDefaultColor) {
+            System.out.println(" (default)");
+        } else {
+            System.out.println();
+        }
     }
 
     private static void printlnWithHighlight(String line) {

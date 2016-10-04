@@ -56,4 +56,4 @@ ugly and not something you want to write each time
 simple script called **hl** which will do it for you which is what is referenced
 in the help text.
 
-![Usage](https://cloud.githubusercontent.com/assets/16898116/19025233/ac88c658-890d-11e6-92c2-46517b4a8598.png)
+![Usage](https://cloud.githubusercontent.com/assets/16898116/19061924/bebd88c4-89ec-11e6-8f65-a98d3e8711d4.png)
