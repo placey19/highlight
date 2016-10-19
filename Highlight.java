@@ -242,12 +242,15 @@ public class Highlight {
         }
     }
 
-    private static void printlnWithHighlight(String line) {
+    private static void printlnWithHighlight(final String wholeLine) {
+        String line = wholeLine;
+
         while (line.length() > 0) {
             int index = indexOf(line, sTargetText);
             if (index >= 0) {
                 if (sHighlightWholeLine) {
-                    System.out.print(sAttributes + line + RESET);
+                    //use reset at the start as an indicator that the whole line is being highlighted
+                    System.out.print(RESET + sAttributes + line + RESET);
                     break;
                 }
 
@@ -255,8 +258,10 @@ public class Highlight {
                     System.out.print(line.substring(0, index));
                 }
 
+                //if the whole line has been highlighted from another process, get the attributes used, else reset
+                String endAttributes = (wholeLine.startsWith(RESET) ? getStartAttributes(wholeLine) : RESET);
                 int endIndex = (index + sTargetText.length());
-                System.out.print(sAttributes + line.substring(index, endIndex) + RESET);
+                System.out.print(sAttributes + line.substring(index, endIndex) + endAttributes);
 
                 line = line.substring(endIndex);
             } else {
@@ -266,6 +271,17 @@ public class Highlight {
         }
 
         System.out.println();
+    }
+
+    private static String getStartAttributes(final String wholeLine) {
+        String line = wholeLine;
+        int endIndex = 0;
+        while (line.startsWith("\u001B")) {
+            int index = (line.indexOf("m") + 1);
+            endIndex += index;
+            line = line.substring(index);
+        }
+        return wholeLine.substring(0, endIndex);
     }
 
     private static int indexOf(final String line, final String text) {

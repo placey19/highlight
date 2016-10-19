@@ -19,7 +19,7 @@ can be executed.
 - Run **hlCompile**.
 - Run **hl** to make sure all is well.
 
-## Disclaimers & limitations
+## Support & limitations
 
 I've tried this with Terminal v2.6.1 on OS X El Capitan, Windows 10 Command
 Prompt and Windows 10 Powershell. I've read the ANSI codes are widely supported
@@ -31,11 +31,6 @@ The way this works is it adds escaped sequences of text which is then parsed by
 the Terminal which then renders the text with the desired attributes. However,
 there is a known limitation which is if you use a sequence of text as the text
 to highlight which matches an escaped sequence then things go awry.
-
-Also, if you want to pipe stdin more than once like:
-`cat whatever.txt | hl -r red | hl -g green` and both texts are matched on the
-same line then the two instances of Highlight might clash and not have the
-desired result.
 
 ## Optional environment variables
 
