@@ -249,6 +249,9 @@ public class Highlight {
             int index = indexOf(line, sTargetText);
             if (index >= 0) {
                 if (sHighlightWholeLine) {
+                    //replace all resets that might already have been added to the line with the attributes
+                    line = wholeLine.replace(RESET, sAttributes);
+
                     //use reset at the start as an indicator that the whole line is being highlighted
                     System.out.print(RESET + sAttributes + line + RESET);
                     break;

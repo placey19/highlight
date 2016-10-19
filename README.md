@@ -32,6 +32,11 @@ the Terminal which then renders the text with the desired attributes. However,
 there is a known limitation which is if you use a sequence of text as the text
 to highlight which matches an escaped sequence then things go awry.
 
+Also, if you want to pipe stdin more than once like:
+`cat whatever.txt | hl -r red | hl -g green` and both texts are matched on the
+same line then the two instances of Highlight might clash and not have the
+desired result.
+
 ## Optional environment variables
 
 These are not mentioned in the help text but are supported:
