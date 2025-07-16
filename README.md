@@ -14,10 +14,12 @@ text can be highlighted by providing a color option.
 A JDK must be installed and setup on the command line so both `java` and `javac`
 can be executed.
 
-- Clone repository to a local folder.
-- Add folder of the repository to your PATH environment variable.
-- Run **hlCompile**.
-- Run **hl** to make sure all is well.
+- Clone repository to a local folder
+- Add folder of the repository to your PATH environment variable
+- Run **hlCompile**
+- Run **hl** to make sure all is well
+
+Optionally just open in IntelliJ IDEA and build the project.
 
 ## Support & limitations
 
