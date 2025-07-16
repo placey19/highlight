@@ -3,11 +3,11 @@ import java.util.*;
 
 public class Highlight {
 
-    //environment variables
-    private static final String ENV_DEFAULT_COLOR = "HL_DEFAULT_COLOR";                      //user-defined default color
-    private static final String ENV_ALWAYS_CASE_INSENSTIVE = "HL_ALWAYS_CASE_INSENSITIVE";   //always perform case insensitive matching
+    // environment variables
+    private static final String ENV_DEFAULT_COLOR = "HL_DEFAULT_COLOR";                         // user-defined default color
+    private static final String ENV_ALWAYS_CASE_INSENSITIVE = "HL_ALWAYS_CASE_INSENSITIVE";     // always perform case-insensitive matching
 
-    //colors
+    // colors
     enum Color {
         BLACK,
         RED,
@@ -21,13 +21,13 @@ public class Highlight {
 
     private static Color sDefaultColor = Color.WHITE;
 
-    //attributes
+    // attributes
     private static final String RESET = "\u001B[0m";
     private static final String BOLD = "\u001B[1m";
     private static final String UNDERLINE = "\u001B[4m";
     private static final String BLINK = "\u001B[5m";
 
-    //text colors
+    // text colors
     private static final String TEXT_BLACK = BOLD + "\u001B[30m";
     private static final String TEXT_RED = BOLD + "\u001B[31m";
     private static final String TEXT_GREEN = BOLD + "\u001B[32m";
@@ -37,7 +37,7 @@ public class Highlight {
     private static final String TEXT_CYAN = BOLD + "\u001B[36m";
     private static final String TEXT_WHITE = BOLD + "\u001B[37m";
 
-    //background colors
+    // background colors
     private static final String BACK_BLACK = BOLD + "\u001B[40m";
     private static final String BACK_RED = BOLD + "\u001B[41m";
     private static final String BACK_GREEN = BOLD + "\u001B[42m";
@@ -47,68 +47,65 @@ public class Highlight {
     private static final String BACK_CYAN = BOLD + "\u001B[46m";
     private static final String BACK_WHITE = BOLD + "\u001B[47m";
 
-    //color options mapping
+    // color options mapping
     private static final Map<String, Color> COLORS_MAP;
     static {
-        final Map<String, Color> colorsMap = new HashMap<String, Color>();
-        colorsMap.put("-a", Color.BLACK);             //-a for black because -b is for blue!
-        colorsMap.put("--black", Color.BLACK);
-        colorsMap.put("-r", Color.RED);
-        colorsMap.put("--red", Color.RED);
-        colorsMap.put("-g", Color.GREEN);
-        colorsMap.put("--green", Color.GREEN);
-        colorsMap.put("-y", Color.YELLOW);
-        colorsMap.put("--yellow", Color.YELLOW);
-        colorsMap.put("-b", Color.BLUE);
-        colorsMap.put("--blue", Color.BLUE);
-        colorsMap.put("-p", Color.PURPLE);
-        colorsMap.put("--purple", Color.PURPLE);
-        colorsMap.put("-c", Color.CYAN);
-        colorsMap.put("--cyan", Color.CYAN);
-        colorsMap.put("-w", Color.WHITE);
-        colorsMap.put("--white", Color.WHITE);
-        COLORS_MAP = Collections.unmodifiableMap(colorsMap);
+        COLORS_MAP = Map.ofEntries(
+                Map.entry("-a", Color.BLACK),             // -a for black because -b is for blue!
+                Map.entry("--black", Color.BLACK),
+                Map.entry("-r", Color.RED),
+                Map.entry("--red", Color.RED),
+                Map.entry("-g", Color.GREEN),
+                Map.entry("--green", Color.GREEN),
+                Map.entry("-y", Color.YELLOW),
+                Map.entry("--yellow", Color.YELLOW),
+                Map.entry("-b", Color.BLUE),
+                Map.entry("--blue", Color.BLUE),
+                Map.entry("-p", Color.PURPLE),
+                Map.entry("--purple", Color.PURPLE),
+                Map.entry("-c", Color.CYAN),
+                Map.entry("--cyan", Color.CYAN),
+                Map.entry("-w", Color.WHITE),
+                Map.entry("--white", Color.WHITE));
     }
 
-    //text colors
+    // text colors
     private static final Map<Color, String> TEXT_COLORS_MAP;
     static {
-        final Map<Color, String> colorsMap = new HashMap<Color, String>();
-        colorsMap.put(Color.BLACK, TEXT_BLACK);
-        colorsMap.put(Color.RED, TEXT_RED);
-        colorsMap.put(Color.GREEN, TEXT_GREEN);
-        colorsMap.put(Color.YELLOW, TEXT_YELLOW);
-        colorsMap.put(Color.BLUE, TEXT_BLUE);
-        colorsMap.put(Color.PURPLE, TEXT_PURPLE);
-        colorsMap.put(Color.CYAN, TEXT_CYAN);
-        colorsMap.put(Color.WHITE, TEXT_WHITE);
-        TEXT_COLORS_MAP = Collections.unmodifiableMap(colorsMap);
+        TEXT_COLORS_MAP = Map.ofEntries(
+                Map.entry(Color.BLACK, TEXT_BLACK),
+                Map.entry(Color.RED, TEXT_RED),
+                Map.entry(Color.GREEN, TEXT_GREEN),
+                Map.entry(Color.YELLOW, TEXT_YELLOW),
+                Map.entry(Color.BLUE, TEXT_BLUE),
+                Map.entry(Color.PURPLE, TEXT_PURPLE),
+                Map.entry(Color.CYAN, TEXT_CYAN),
+                Map.entry(Color.WHITE, TEXT_WHITE));
     }
 
-    //background colors
+    // background colors
     private static final Map<Color, String> BACK_COLORS_MAP;
     static {
-        final Map<Color, String> colorsMap = new HashMap<Color, String>();
-        colorsMap.put(Color.BLACK, BACK_BLACK);
-        colorsMap.put(Color.RED, BACK_RED);
-        colorsMap.put(Color.GREEN, BACK_GREEN);
-        colorsMap.put(Color.YELLOW, BACK_YELLOW);
-        colorsMap.put(Color.BLUE, BACK_BLUE);
-        colorsMap.put(Color.PURPLE, BACK_PURPLE);
-        colorsMap.put(Color.CYAN, BACK_CYAN);
-        colorsMap.put(Color.WHITE, BACK_WHITE);
-        BACK_COLORS_MAP = Collections.unmodifiableMap(colorsMap);
+        BACK_COLORS_MAP = Map.ofEntries(
+                Map.entry(Color.BLACK, BACK_BLACK),
+                Map.entry(Color.RED, BACK_RED),
+                Map.entry(Color.GREEN, BACK_GREEN),
+                Map.entry(Color.YELLOW, BACK_YELLOW),
+                Map.entry(Color.BLUE, BACK_BLUE),
+                Map.entry(Color.PURPLE, BACK_PURPLE),
+                Map.entry(Color.CYAN, BACK_CYAN),
+                Map.entry(Color.WHITE, BACK_WHITE));
     }
 
     private static String sTargetText;
     private static String sAttributes = "";
     private static boolean sHighlightWholeLine = false;
-    private static boolean sCaseSensitive = true;               //set by command line option
-    private static boolean sAlwaysCaseInsensitive = false;      //set by environment variable
+    private static boolean sCaseSensitive = true;               // set by command line option
+    private static boolean sAlwaysCaseInsensitive = false;      // set by environment variable
 
-    public static void main(final String args[]) throws IOException {
+    public static void main(final String[] args) throws IOException {
         if (parseEnvVars() && parseArgs(args)) {
-            String line = "";
+            String line;
             final BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
             while ((line = stdin.readLine()) != null) {
                 printlnWithHighlight(line);
@@ -133,14 +130,14 @@ public class Highlight {
             }
         }
 
-        final String envCaseInsensitive = envVars.get(ENV_ALWAYS_CASE_INSENSTIVE);
+        final String envCaseInsensitive = envVars.get(ENV_ALWAYS_CASE_INSENSITIVE);
         if (envCaseInsensitive != null) {
             final String value = envCaseInsensitive.toLowerCase();
             sAlwaysCaseInsensitive = value.equals("true") || value.equals("1");
             if (sAlwaysCaseInsensitive) {
                 sCaseSensitive = false;
-            } else if (!value.equals("") && !value.equals("false") && !value.equals("0")) {
-                System.err.println("Environment variable: " + TEXT_WHITE + ENV_ALWAYS_CASE_INSENSTIVE + RESET +
+            } else if (!value.isEmpty() && !value.equals("false") && !value.equals("0")) {
+                System.err.println("Environment variable: " + TEXT_WHITE + ENV_ALWAYS_CASE_INSENSITIVE + RESET +
                                    " has unknown value: " + TEXT_WHITE + envCaseInsensitive + RESET);
                 result = false;
             }
@@ -153,7 +150,7 @@ public class Highlight {
         return result;
     }
 
-    private static boolean parseArgs(final String args[]) {
+    private static boolean parseArgs(final String[] args) {
         if (args.length > 0) {
             Color color = sDefaultColor;
             boolean underline = false;
@@ -164,24 +161,22 @@ public class Highlight {
             for (int i = 0; i < lastArgIndex; ++i) {
                 final String arg = args[i];
 
-                if (arg.equals("-i") || arg.equals("--ignore-case")) {
-                    sCaseSensitive = false;
-                } else if (arg.equals("-l") || arg.equals("--line")) {
-                    sHighlightWholeLine = true;
-                } else if (arg.equals("-u") || arg.equals("--underline")) {
-                    underline = true;
-                } else if (arg.equals("-k") || arg.equals("--blink")) {
-                    blink = true;
-                } else if (arg.equals("-n") || arg.equals("--background")) {
-                    background = true;
-                } else {
-                    final Color mappedColor = COLORS_MAP.get(arg);
-                    if (mappedColor != null) {
-                        color = mappedColor;
-                    } else {
-                        System.err.println("Invalid parameter: " + arg);
-                        System.err.println();
-                        return false;
+                switch (arg) {
+                    case "-i", "--ignore-case" -> sCaseSensitive = false;
+                    case "-l", "--line" -> sHighlightWholeLine = true;
+                    case "-u", "--underline" -> underline = true;
+                    case "-k", "--blink" -> blink = true;
+                    case "-n", "--background" -> background = true;
+
+                    default -> {
+                        final Color mappedColor = COLORS_MAP.get(arg);
+                        if (mappedColor != null) {
+                            color = mappedColor;
+                        } else {
+                            System.err.println("Invalid parameter: " + arg);
+                            System.err.println();
+                            return false;
+                        }
                     }
                 }
             }
@@ -245,14 +240,14 @@ public class Highlight {
     private static void printlnWithHighlight(final String wholeLine) {
         String line = wholeLine;
 
-        while (line.length() > 0) {
+        while (!line.isEmpty()) {
             int index = indexOf(line, sTargetText);
             if (index >= 0) {
                 if (sHighlightWholeLine) {
-                    //replace all resets that might already have been added to the line with the attributes
+                    // replace all resets that might already have been added to the line with the attributes
                     line = wholeLine.replace(RESET, sAttributes);
 
-                    //use reset at the start as an indicator that the whole line is being highlighted
+                    // use reset at the start as an indicator that the whole line is being highlighted
                     System.out.print(RESET + sAttributes + line + RESET);
                     break;
                 }
@@ -261,7 +256,7 @@ public class Highlight {
                     System.out.print(line.substring(0, index));
                 }
 
-                //if the whole line has been highlighted from another process, get the attributes used, else reset
+                // if the whole line has been highlighted from another process, get the attributes used, else reset
                 String endAttributes = (wholeLine.startsWith(RESET) ? getStartAttributes(wholeLine) : RESET);
                 int endIndex = (index + sTargetText.length());
                 System.out.print(sAttributes + line.substring(index, endIndex) + endAttributes);
