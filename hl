@@ -1,4 +1,5 @@
 #!/bin/bash
 
-classpath=$(dirname "$0")
-java -classpath "$classpath" Highlight "$@"
+ROOTPATH=$(dirname "$0")
+OUTPUTPATH=$ROOTPATH/out/production/highlight
+java -classpath "$OUTPUTPATH" Highlight "$@"

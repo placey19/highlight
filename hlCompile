@@ -1,7 +1,9 @@
 #!/bin/bash
 
-classpath=$(dirname "$0")
-javac "$classpath/Highlight.java"
+ROOTPATH=$(dirname "$0")
+OUTPUTPATH=$ROOTPATH/out/production/highlight
+javac -d "$OUTPUTPATH" "$ROOTPATH/src/Highlight.java"
+
 if [ $? -eq 0 ]; then
   echo "Success!"
   echo

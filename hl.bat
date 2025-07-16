@@ -1,5 +1,6 @@
 @echo off
 setlocal
 
-set classpath=%~dp0
-java -classpath %classpath% Highlight %*
+set ROOTPATH=%~dp0
+set OUTPUTPATH=%ROOTPATH%\out\production\highlight
+java -classpath %OUTPUTPATH% Highlight %*
